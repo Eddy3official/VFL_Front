@@ -91,6 +91,42 @@ const MATCH_LIBRARY = [
 let selectedHomeTeam = "";
 let selectedAwayTeam = "";
 
+// ==========================================
+// SYSTEM INITIATION CORE (CRITICAL CORE FIX)
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    // 1. Fill the dropdown markup containers with team data names dynamically
+    buildDropdownOptions("home");
+    buildDropdownOptions("away");
+
+    // 2. Instantiate element tracking listeners on the DOM nodes
+    setupDropdownInteractions("home");
+    setupDropdownInteractions("away");
+
+    // 3. Bind the main analysis processor to your user submission action
+    const crackButton = document.getElementById("crack-btn");
+    if (crackButton) {
+        crackButton.addEventListener("click", processAnalysis);
+    }
+});
+
+// Helper initialization routine to create options inside dropdown targets
+function buildDropdownOptions(side) {
+    const listContainer = document.getElementById(`${side}-list`);
+    if (!listContainer) return;
+    
+    listContainer.innerHTML = "";
+    VALID_TEAMS.forEach(team => {
+        const option = document.createElement("div");
+        option.className = "custom-option";
+        option.textContent = team;
+        option.dataset.value = team;
+        listContainer.appendChild(option);
+    });
+}
+
+
 // Attach event tracking rules to the structural components
 function setupDropdownInteractions(side) {
     const trigger = document.getElementById(`${side}-trigger`);
