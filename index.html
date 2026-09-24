@@ -3,101 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VFL Engine Cracker Dashboard</title>
-    <!-- Stable Tailwind CSS Core Engine -->
-    <script src="https://tailwindcss.com"></script>
-    <!-- Link to your custom separate stylesheet mapping -->
+    <title>Virtual Football Engine Cracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-[#020617] text-slate-100 min-h-screen antialiased flex items-center justify-center p-4">
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ VIRTUAL FOOTBALL ENGINE CRACKER ⚡</h1>
+            <p>Front-End Live Prediction Matrix</p>
+        </header>
 
-    <!-- Main Container Card -->
-    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 transition-all duration-300">
-        
-        <!-- Header Section -->
-        <div class="text-center border-b border-slate-800 pb-5 mb-6">
-            <h1 class="text-2xl font-black text-amber-500 tracking-wider uppercase flex items-center justify-center gap-2">
-                ⚡ VFL ENGINE CRACKER
-            </h1>
-            <p class="text-slate-400 text-[11px] font-semibold tracking-wide mt-2 bg-slate-950/60 py-1.5 px-4 rounded-full inline-block border border-slate-800/60">
-                Bridged to Cloudflare Python Workers Environment
-            </p>
-        </div>
-
-        <!-- Input Variables Panel -->
-        <div class="space-y-5">
-            <!-- Team Selectors Dropdown Row -->
-            <div class="grid grid-cols-2 gap-4">
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">Home Team</label>
-                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 cursor-pointer transition-all duration-200">
-                        <option value="">Loading teams...</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">Away Team</label>
-                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 cursor-pointer transition-all duration-200">
-                        <option value="">Loading teams...</option>
-                    </select>
-                </div>
-            </div>
-
-            <!-- Odds Parameter Entry Dashboard Box -->
-            <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/80">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center mb-3">Live Decimal Match Odds</label>
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Home (1)</span>
-                        <input type="number" id="hOdds" step="0.01" min="1.01" placeholder="2.30" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
+        <main>
+            <!-- Input Control Panel -->
+            <section class="control-panel">
+                <div class="form-row">
+                    <!-- Home Team Custom Dropdown -->
+                    <div class="form-group">
+                        <label>Home Team</label>
+                        <div class="custom-select-container" id="home-select-container">
+                            <div class="custom-select-trigger" id="home-trigger">Select Home Team</div>
+                            <div class="custom-options" id="home-options">
+                                <input type="text" class="search-input" id="home-search" placeholder="Search team...">
+                                <div class="options-list" id="home-list"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Draw (X)</span>
-                        <input type="number" id="dOdds" step="0.01" min="1.01" placeholder="3.40" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
-                    </div>
-                    <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Away (2)</span>
-                        <input type="number" id="aOdds" step="0.01" min="1.01" placeholder="2.90" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
+
+                    <!-- Away Team Custom Dropdown -->
+                    <div class="form-group">
+                        <label>Away Team</label>
+                        <div class="custom-select-container" id="away-select-container">
+                            <div class="custom-select-trigger" id="away-trigger">Select Away Team</div>
+                            <div class="custom-options" id="away-options">
+                                <input type="text" class="search-input" id="away-search" placeholder="Search team...">
+                                <div class="options-list" id="away-list"></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Run Button Trigger -->
-            <button onclick="sendToPythonWorker()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-[0.99] transition-all text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-xl shadow-lg cursor-pointer flex items-center justify-center gap-2">
-                🚀 RUN ALGORITHMIC CRACK ENGINE
-            </button>
-        </div>
+                <div class="form-row odds-row">
+                    <!-- Odds: Home -->
+                    <div class="form-group size-small">
+                        <label>Home Odds (1)</label>
+                        <input type="number" id="home-odds" step="0.01" min="1.01" placeholder="1.85">
+                    </div>
+                    <!-- Odds: Draw -->
+                    <div class="form-group size-small">
+                        <label>Draw Odds (X)</label>
+                        <input type="number" id="draw-odds" step="0.01" min="1.01" placeholder="3.40">
+                    </div>
+                    <!-- Odds: Away -->
+                    <div class="form-group size-small">
+                        <label>Away Odds (2)</label>
+                        <input type="number" id="away-odds" step="0.01" min="1.01" placeholder="4.20">
+                    </div>
+                </div>
 
-        <!-- Analytical Output Block Visual Cards (Hidden Initially) -->
-        <div id="outputBlock" class="hidden mt-6 border-t border-slate-800 pt-5 space-y-4">
-            
-            <!-- Implied Percentage Probabilities Output display -->
-            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center shadow-inner">
-                <span class="block text-[9px] uppercase tracking-widest font-black text-slate-500 mb-1.5">True Probability Projections</span>
-                <span id="trueProbabilities" class="font-mono text-sm font-black text-slate-200 tracking-wide"></span>
-                <span id="overround" class="block text-[10px] text-rose-400 font-bold mt-2 bg-rose-950/30 py-1 rounded-md max-w-max mx-auto px-3"></span>
-            </div>
+                <button id="crack-btn" class="primary-btn">CRACK FIXTURE</button>
+            </section>
 
-            <!-- Primary Strategy Recommendation Selection Output Box -->
-            <div class="bg-slate-800/60 border border-slate-700/50 p-4 rounded-xl shadow-md">
-                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold">Calculated Target Selection</span>
-                <span id="predictionOutput" class="text-base md:text-lg font-black text-amber-400 block mt-1 tracking-wide"></span>
-            </div>
+            <!-- Results Output Panel -->
+            <section class="results-panel hidden" id="results-panel">
+                <h2>📊 CRACKER DATA OUTPUT</h2>
+                <hr class="divider">
+                
+                <div class="meta-info">
+                    <p><strong>Matchup:</strong> <span id="res-matchup"></span></p>
+                    <p><strong>True Math Odds:</strong> <span id="res-true-odds"></span></p>
+                    <p><strong>Bookie Margin:</strong> <span id="res-margin" class="highlight-yellow"></span></p>
+                </div>
+                
+                <hr class="divider">
 
-            <!-- High Risk Alert Conditions Warning Screen Frame -->
-            <div id="dangerBlock" class="bg-rose-950/20 border border-rose-900/40 p-4 rounded-xl hidden">
-                <span class="block text-[9px] uppercase tracking-widest text-rose-400 font-extrabold flex items-center gap-1">⚠️ RISK ASSESSMENT ALERT</span>
-                <p id="dangerOutput" class="text-xs text-rose-300 mt-2 font-medium leading-relaxed"></p>
-            </div>
+                <div class="prediction-box">
+                    <div class="output-item">
+                        <span class="label">PROBABLE WINNER:</span>
+                        <span id="res-winner" class="value text-green"></span>
+                    </div>
+                    <div class="output-item">
+                        <span class="label">ALGO CONFIDENCE:</span>
+                        <span id="res-confidence" class="value"></span>
+                    </div>
+                    <div class="output-item danger-container">
+                        <span class="label">RISK ASSESSMENT:</span>
+                        <p id="res-risk" class="value-text"></p>
+                    </div>
+                </div>
 
-            <!-- Predefined Event Match Timeline Scripts Templates Box Layout -->
-            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 shadow-md">
-                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold mb-2.5 px-0.5">Matching Timeline Scripts Stored In Model</span>
-                <ul id="templatesList" class="text-xs font-mono font-medium text-slate-400 space-y-2 list-none pl-0"></ul>
-            </div>
-        </div>
+                <hr class="divider">
+                
+                <div class="templates-box">
+                    <h3>MATCHTIMELINE TEMPLATES SPOTTED:</h3>
+                    <ul id="res-templates" class="template-list"></ul>
+                </div>
+            </section>
+        </main>
     </div>
 
-    <!-- Script Injection pointer -->
     <script src="script.js"></script>
 </body>
 </html>
