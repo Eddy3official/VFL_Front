@@ -64,7 +64,7 @@ async def sendToPythonWorker() {
 
     try {
         // Send JSON data stream directly to Cloudflare Python Worker environment
-        const response = await fetch(`${PYTHON_WORKER_URL}`, {
+        const response = await fetch(`${https://vfl.gikunju.workers.dev}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
