@@ -3,95 +3,101 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Football Algorithm Cracker</title>
-    <!-- Tailwind CSS v4 CDN Framework Engine for Grid layouts -->
-    <script src="https://jsdelivr.net"></script>
-    <!-- Link directly to your local isolated CSS design stylesheet sheets -->
+    <title>VFL Engine Cracker Dashboard</title>
+    <!-- Stable Tailwind CSS Core Engine -->
+    <script src="https://tailwindcss.com"></script>
+    <!-- Link to your custom separate stylesheet mapping -->
     <link rel="stylesheet" href="style.css">
 </head>
-<body class="p-3 md:p-6 antialiased min-h-screen flex items-center justify-center">
+<body class="bg-[#020617] text-slate-100 min-h-screen antialiased flex items-center justify-center p-4">
 
-    <div class="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-5 md:p-6">
-        <!-- Dashboard Branding Header Module -->
-        <div class="text-center border-b border-slate-800 pb-4 mb-5">
-            <h1 class="text-xl md:text-2xl font-black text-amber-500 tracking-wider uppercase flex items-center justify-center gap-2">
-                <span>⚡</span> VFL ENGINE CRACKER
+    <!-- Main Container Card -->
+    <div class="w-full max-w-lg bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-6 transition-all duration-300">
+        
+        <!-- Header Section -->
+        <div class="text-center border-b border-slate-800 pb-5 mb-6">
+            <h1 class="text-2xl font-black text-amber-500 tracking-wider uppercase flex items-center justify-center gap-2">
+                ⚡ VFL ENGINE CRACKER
             </h1>
-            <p class="text-slate-400 text-[11px] font-medium tracking-wide mt-1 bg-slate-950/60 py-1 px-3 rounded-full inline-block border border-slate-800/50">
+            <p class="text-slate-400 text-[11px] font-semibold tracking-wide mt-2 bg-slate-950/60 py-1.5 px-4 rounded-full inline-block border border-slate-800/60">
                 Bridged to Cloudflare Python Workers Environment
             </p>
         </div>
 
-        <!-- Inputs Parameters Matrix Content Form Box -->
-        <div class="space-y-4">
-            <!-- Team Drops Selector Rows -->
-            <div class="grid grid-cols-2 gap-3">
+        <!-- Input Variables Panel -->
+        <div class="space-y-5">
+            <!-- Team Selectors Dropdown Row -->
+            <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 px-0.5">Home Team</label>
-                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-semibold outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 cursor-pointer shadow-inner"></select>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">Home Team</label>
+                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 cursor-pointer transition-all duration-200">
+                        <option value="">Loading teams...</option>
+                    </select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 px-0.5">Away Team</label>
-                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-semibold outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 cursor-pointer shadow-inner"></select>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-2 px-1">Away Team</label>
+                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-bold outline-none focus:border-amber-500 focus:ring-2 focus:ring-amber-500/20 cursor-pointer transition-all duration-200">
+                        <option value="">Loading teams...</option>
+                    </select>
                 </div>
             </div>
 
-            <!-- Live Market Decimal Odds Fields -->
-            <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60">
-                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center mb-2.5">Live Decimal Match Odds</label>
-                <div class="grid grid-cols-3 gap-2.5">
+            <!-- Odds Parameter Entry Dashboard Box -->
+            <div class="bg-slate-950/50 p-4 rounded-2xl border border-slate-800/80">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center mb-3">Live Decimal Match Odds</label>
+                <div class="grid grid-cols-3 gap-3">
                     <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Home (1)</span>
-                        <input type="number" id="hOdds" step="0.01" min="1.01" placeholder="2.30" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Home (1)</span>
+                        <input type="number" id="hOdds" step="0.01" min="1.01" placeholder="2.30" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
                     </div>
                     <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Draw (X)</span>
-                        <input type="number" id="dOdds" step="0.01" min="1.01" placeholder="3.40" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Draw (X)</span>
+                        <input type="number" id="dOdds" step="0.01" min="1.01" placeholder="3.40" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
                     </div>
                     <div>
-                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Away (2)</span>
-                        <input type="number" id="aOdds" step="0.01" min="1.01" placeholder="2.90" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1.5">Away (2)</span>
+                        <input type="number" id="aOdds" step="0.01" min="1.01" placeholder="2.90" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800 shadow-md transition-all duration-200">
                     </div>
                 </div>
             </div>
 
-            <!-- Calculation Core Trigger Execution Action Button -->
-            <button onclick="sendToPythonWorker()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-[0.99] transform-all text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl shadow-lg cursor-pointer flex items-center justify-center gap-2">
+            <!-- Run Button Trigger -->
+            <button onclick="sendToPythonWorker()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-[0.99] transition-all text-slate-950 font-black text-xs uppercase tracking-widest py-4 rounded-xl shadow-lg cursor-pointer flex items-center justify-center gap-2">
                 🚀 RUN ALGORITHMIC CRACK ENGINE
             </button>
         </div>
 
-        <!-- Result Matrix Component Output Cards (Hidden on System Boot) -->
+        <!-- Analytical Output Block Visual Cards (Hidden Initially) -->
         <div id="outputBlock" class="hidden mt-6 border-t border-slate-800 pt-5 space-y-4">
             
-            <!-- Statistical Probability Percentage Data Display Box -->
-            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center shadow-inner">
-                <span class="block text-[9px] uppercase tracking-widest font-black text-slate-500 mb-1">True Probability Projections</span>
+            <!-- Implied Percentage Probabilities Output display -->
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 text-center shadow-inner">
+                <span class="block text-[9px] uppercase tracking-widest font-black text-slate-500 mb-1.5">True Probability Projections</span>
                 <span id="trueProbabilities" class="font-mono text-sm font-black text-slate-200 tracking-wide"></span>
-                <span id="overround" class="block text-[10px] text-rose-400 font-bold mt-1 bg-rose-950/20 py-0.5 rounded-md max-w-max mx-auto px-2"></span>
+                <span id="overround" class="block text-[10px] text-rose-400 font-bold mt-2 bg-rose-950/30 py-1 rounded-md max-w-max mx-auto px-3"></span>
             </div>
 
-            <!-- Target Strategic Selection Value Output Screen Block -->
-            <div class="bg-slate-800/80 border border-slate-700/50 p-4 rounded-xl shadow-md">
+            <!-- Primary Strategy Recommendation Selection Output Box -->
+            <div class="bg-slate-800/60 border border-slate-700/50 p-4 rounded-xl shadow-md">
                 <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold">Calculated Target Selection</span>
                 <span id="predictionOutput" class="text-base md:text-lg font-black text-amber-400 block mt-1 tracking-wide"></span>
             </div>
 
-            <!-- Dynamic Risk Condition assessment Warning Area -->
-            <div id="dangerBlock" class="bg-rose-950/20 border border-rose-900/50 p-4 rounded-xl hidden">
+            <!-- High Risk Alert Conditions Warning Screen Frame -->
+            <div id="dangerBlock" class="bg-rose-950/20 border border-rose-900/40 p-4 rounded-xl hidden">
                 <span class="block text-[9px] uppercase tracking-widest text-rose-400 font-extrabold flex items-center gap-1">⚠️ RISK ASSESSMENT ALERT</span>
-                <p id="dangerOutput" class="text-xs text-rose-300 mt-1.5 font-medium leading-relaxed"></p>
+                <p id="dangerOutput" class="text-xs text-rose-300 mt-2 font-medium leading-relaxed"></p>
             </div>
 
-            <!-- Model Match Timeline Sub Array Template outputs lists -->
+            <!-- Predefined Event Match Timeline Scripts Templates Box Layout -->
             <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 shadow-md">
-                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold mb-2 px-0.5">Matching Timeline Scripts Stored In Model</span>
-                <ul id="templatesList" class="text-xs font-mono font-medium text-slate-400 space-y-1.5 list-none pl-1"></ul>
+                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold mb-2.5 px-0.5">Matching Timeline Scripts Stored In Model</span>
+                <ul id="templatesList" class="text-xs font-mono font-medium text-slate-400 space-y-2 list-none pl-0"></ul>
             </div>
         </div>
     </div>
 
-    <!-- Embed logic sheets connection pointers parameters cleanly at page layout floor base -->
+    <!-- Script Injection pointer -->
     <script src="script.js"></script>
 </body>
 </html>
