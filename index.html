@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Algo Cracker Dashboard</title>
+    <script src="https://jsdelivr.net"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 p-4 font-sans">
+
+    <div class="max-w-xl mx-auto mt-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6">
+        <div class="text-center border-b border-slate-800 pb-4 mb-6">
+            <h1 class="text-xl font-black text-amber-500 tracking-wide uppercase">🐍 Python-Worker Cracker</h1>
+            <p class="text-slate-500 text-xs mt-0.5">Cloudflare Front-End Bridged to Cloudflare Python Workers Environment</p>
+        </div>
+
+        <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Home Team</label>
+                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 outline-none"></select>
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Away Team</label>
+                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 outline-none"></select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 pt-2">
+                <input type="number" id="hOdds" step="0.01" placeholder="Home Odds (1)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
+                <input type="number" id="dOdds" step="0.01" placeholder="Draw Odds (X)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
+                <input type="number" id="aOdds" step="0.01" placeholder="Away Odds (2)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
+            </div>
+
+            <button onclick="sendToPythonWorker()" class="w-full bg-amber-500 hover:bg-amber-600 transition text-slate-950 font-black text-xs uppercase tracking-wider py-3 rounded-lg mt-4 cursor-pointer">
+                Process via Cloudflare Python
+            </button>
+        </div>
+
+        <!-- Analytical Output Block -->
+        <div id="outputBlock" class="hidden mt-6 border-t border-slate-800 pt-4 space-y-3">
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center text-xs">
+                <span id="trueProbabilities" class="font-mono text-slate-300 font-bold"></span>
+                <span id="overround" class="block text-[10px] text-red-400 mt-0.5"></span>
+            </div>
+            <div class="bg-slate-800 p-3 rounded-lg">
+                <span class="block text-[9px] uppercase tracking-wider text-slate-400 font-bold">Calculated Target Outcome</span>
+                <span id="predictionOutput" class="text-sm font-black text-amber-400 block mt-0.5"></span>
+            </div>
+            <div id="dangerBlock" class="bg-red-950/20 border border-red-900/50 p-3 rounded-lg hidden">
+                <span class="block text-[9px] uppercase tracking-wider text-red-400 font-bold">Risk Flag</span>
+                <p id="dangerOutput" class="text-xs text-red-300 mt-0.5 leading-relaxed"></p>
+            </div>
+            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
+                <span class="block text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-1">Expected Timeline Scripts</span>
+                <ul id="templatesList" class="text-xs font-mono text-slate-400 space-y-0.5 list-disc list-inside"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // PASTE YOUR LIVE CLOUDFLARE WORKER ROUTE URL HERE WHEN DEPLOYED
+        const PYTHON_WORKER_URL = "https://workers.dev";
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            try {
+                const res = await fetch(`${PYTHON_WORKER_URL}`);
+                const teams = await res.json();
+                const hSelect = document.getElementById('homeTeam');
+                const aSelect = document.getElementById('awayTeam');
+                
+                teams.forEach(t => {
+                    hSelect.options.add(new Option(t, t));
+                    aSelect.options.add(new Option(t, t));
+                });
+                aSelect.selectedIndex = 1;
+            } catch(e) { console.error("Synchronizing with Cloudflare Python Worker deployment setup..."); }
+        });
+
+        async function sendToPythonWorker() {
+            const payload = {
+                home: document.getElementById('homeTeam').value,
+                away: document.getElementById('awayTeam').value,
+                h_odds: document.getElementById('hOdds').value,
+                d_odds: document.getElementById('dOdds').value,
+                a_odds: document.getElementById('aOdds').value
+            };
+
+            if(!payload.h_odds || !payload.d_odds || !payload.a_odds) {
+                alert("Please fill out all match decimal odds boxes.");
+                return;
+            }
+
+            try {
+                const response = await fetch(`${PYTHON_WORKER_URL}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const result = await response.json();
+
+                document.getElementById('trueProbabilities').innerText = `H: ${result.probabilities.home} | X: ${result.probabilities.draw} | A: ${result.probabilities.away}`;
+                document.getElementById('overround').innerText = `Bookie Margin: +${result.overround}`;
+                document.getElementById('predictionOutput').innerText = result.prediction;
+                
+                const dangerBox = document.getElementById('dangerBlock');
+                if(result.danger_flag !== "NONE") {
+                    document.getElementById('dangerOutput').innerText = result.danger_flag;
+                    dangerBox.classList.remove('hidden');
+                } else { dangerBox.classList.add('hidden'); }
+
+                const tList = document.getElementById('templatesList');
+                tList.innerHTML = "";
+                result.templates.forEach(t => {
+                    let li = document.createElement('li');
+                    li.innerText = t;
+                    tList.appendChild(li);
+                });
+
+                document.getElementById('outputBlock').classList.remove('hidden');
+            } catch (err) {
+                alert("Worker Error: Check that your Cloudflare Worker URL is correct and active.");
+            }
+        }
+    </script>
+</body>
+</html>
