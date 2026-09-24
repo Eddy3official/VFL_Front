@@ -236,10 +236,13 @@ function processAnalysis() {
     const riskEl = document.getElementById("res-risk");riskEl.textContent = dangerFlag;riskEl.className = "value-text " + (dangerFlag === "NONE" ? "text-green" : "text-red");
     // Output parsing for template list items
     const listEl = document.getElementById("res-templates");
-    if (listEl) {listEl.innerHTML = "";expectedTemplates.forEach(tpl => {
-        const item = document.createElement("li");item.textContent = -> Dynamic Weight: ${tpl};listEl.appendChild(item);
-                 }
-                 );
-                }
+    if (listEl) {
+    listEl.innerHTML = "";
+    expectedTemplates.forEach(tpl => {
+        const item = document.createElement("li");
+        item.textContent = `Dynamic Weight: ${tpl}`;
+        listEl.appendChild(item);
+    });
+}
     // Reveal Output panel element smoothly
     document.getElementById("results-panel").classList.remove("hidden");}
