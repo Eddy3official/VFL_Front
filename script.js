@@ -83,34 +83,13 @@ const MATCH_LIBRARY = [
     { h: "Leeds", a: "Everton", hg: 0, ag: 1 }, { h: "Wolves", a: "West Ham", hg: 1, ag: 1 }
 ];
 
-// App Tracking State VARIABLES
-let selectedHomeTeam = null;
-let selectedAwayTeam = null;
+// ==========================================
+// SEGMENT 1: GLOBAL STATE & DROPDOWN ENGINE
+// ==========================================
 
-// Initializations on Document Ready
-document.addEventListener("DOMContentLoaded", () => {
-    buildDropdownOptions("home");
-    buildDropdownOptions("away");
-    setupDropdownInteractions("home");
-    setupDropdownInteractions("away");
-
-    // Process analysis engine on button click
-    document.getElementById("crack-btn").addEventListener("click", processAnalysis);
-});
-
-// Build standard lists inside custom select targets
-function buildDropdownOptions(side) {
-    const listContainer = document.getElementById(`${side}-list`);
-    listContainer.innerHTML = "";
-    
-    VALID_TEAMS.forEach(team => {
-        const option = document.createElement("div");
-        option.className = "custom-option";
-        option.textContent = team;
-        option.dataset.value = team;
-        listContainer.appendChild(option);
-    });
-}
+// App Tracking State Variables (Initialized clearly)
+let selectedHomeTeam = "";
+let selectedAwayTeam = "";
 
 // Attach event tracking rules to the structural components
 function setupDropdownInteractions(side) {
@@ -119,7 +98,7 @@ function setupDropdownInteractions(side) {
     const searchField = document.getElementById(`${side}-search`);
     const listContainer = document.getElementById(`${side}-list`);
 
-    // Toggle Dropdown viewing modes
+    // Toggle Dropdown viewing modes safely
     trigger.addEventListener("click", (e) => {
         e.stopPropagation();
         closeAllDropdownsExcept(side);
@@ -144,19 +123,22 @@ function setupDropdownInteractions(side) {
         if (e.target.classList.contains("custom-option")) {
             const chosenValue = e.target.dataset.value;
             
+            // Update UI Trigger text immediately
             trigger.textContent = chosenValue;
             optionsPanel.classList.remove("show");
             searchField.value = "";
             resetOptionVisibility(listContainer);
 
+            // CRITICAL FIX: Direct string assignment to global state variables
             if (side === "home") {
-                selectedHomeTeam = chosenValue;
-            } else {
-                selectedAwayTeam = chosenValue;
+                selectedHomeTeam = String(chosenValue).trim();
+            } else if (side === "away") {
+                selectedAwayTeam = String(chosenValue).trim();
             }
         }
     });
 }
+
 
 function resetOptionVisibility(container) {
     const options = container.querySelectorAll(".custom-option");
@@ -177,58 +159,62 @@ document.addEventListener("click", () => {
     document.getElementById("away-options").classList.remove("show");
 });
 
-// Looks for an exact historical match in the database, or runs an intuitive prediction
+// Scans the round-robin library network for an explicit head-to-head match profile
 function findHistoricalRelationship(home, away) {
-    // Check for an exact matching fixture in history
+    // 1. Direct Fixture Verification (Home team hosted Away team previously)
     let directMatch = MATCH_LIBRARY.find(m => m.h === home && m.a === away);
     if (directMatch) {
-Use code with caution.return { type: "DIRECT_HISTORICAL", match: directMatch };}
-    // Check for the inverted fixture (Away team hosted Home team previously)
-    let reverseMatch = MATCH_LIBRARY.find(m => m.h === away && m.a === home);if (reverseMatch) {return { type: "REVERSE_HISTORICAL", match: reverseMatch };}
-    // If no direct data point is available, extract average metrics for each team to run a logical deduction
+        return { type: "DIRECT_HISTORICAL", match: directMatch };
+    }
+
+    // 2. Inverted Fixture Verification (Away team hosted Home team previously)
+    let reverseMatch = MATCH_LIBRARY.find(m => m.h === away && m.a === home);
+    if (reverseMatch) {
+        return { type: "REVERSE_HISTORICAL", match: reverseMatch };
+    }
+
+    // 3. Fallback: Logical Deducer (Runs team averages if no head-to-head exists)
     let homeStats = calculateTeamMetrics(home);
     let awayStats = calculateTeamMetrics(away);
+
     return {
-        type: "LOGICAL_DEDUCTION",homeExpectedGoals: ((homeStats.avgScoredHome + awayStats.avgConcededAway) / 2 || 1.3),awayExpectedGoals: ((awayStats.avgScoredAway + homeStats.avgConcededHome) / 2 || 1.0) 
+        type: "LOGICAL_DEDUCTION",
+        homeExpectedGoals: (homeStats.avgScoredHome + awayStats.avgConcededAway) / 2,
+        awayExpectedGoals: (awayStats.avgScoredAway + homeStats.avgConcededHome) / 2
     };
-   }
+}
 
+// Aggregates goal metrics dynamically while bypassing zero-division crashes
 function calculateTeamMetrics(team) {
-    let stats = { homeGames: 0, awayGames: 0, scoredHome: 0, concededHome: 0, scoredAway: 0, 
-    concededAway: 0 };
-    MATCH_LIBRARY.forEach(m => {
-   
-    if (m.h === team) {
-        stats.homeGames++;
-        stats.scoredHome += m.hg;
-        stats.concededHome += m.ag;} 
-    
-    else if (m.a === team) {
-        stats.awayGames++;
-        stats.scoredAway += m.ag;
-        stats.concededAway += m.hg;
-       }
-     }                
-    );
-    return {avgScoredHome: 
-        stats.homeGames ? 
-        stats.scoredHome / 
-        stats.homeGames : 1.4,avgConcededHome: 
-        stats.homeGames ? 
-        stats.concededHome / 
-        stats.homeGames : 1.1,avgScoredAway: 
-        stats.awayGames ? 
-        stats.scoredAway / 
-        stats.awayGames : 1.0,avgConcededAway: 
-        stats.awayGames ? 
-        stats.concededAway / 
-        stats.awayGames : 1.3
-       }
-    ;}
+    let stats = { 
+        homeGames: 0, awayGames: 0, 
+        scoredHome: 0, concededHome: 0, 
+        scoredAway: 0, concededAway: 0 
+    };
 
-// Engine Calculation Execution Module
+    MATCH_LIBRARY.forEach(m => {
+        if (m.h === team) {
+            stats.homeGames++;
+            stats.scoredHome += m.hg;
+            stats.concededHome += m.ag;
+        } else if (m.a === team) {
+            stats.awayGames++;
+            stats.scoredAway += m.ag;
+            stats.concededAway += m.hg;
+        }
+    });
+
+    // CRITICAL FIX: Safe inline validation defaults to baseline league average (1.2) if games equal 0
+    return {
+        avgScoredHome: stats.homeGames > 0 ? (stats.scoredHome / stats.homeGames) : 1.2,
+        avgConcededHome: stats.homeGames > 0 ? (stats.concededHome / stats.homeGames) : 1.2,
+        avgScoredAway: stats.awayGames > 0 ? (stats.scoredAway / stats.awayGames) : 1.2,
+        avgConcededAway: stats.awayGames > 0 ? (stats.concededAway / stats.awayGames) : 1.2
+    };
+}
+
 function processAnalysis() {
-    // 1. Validation checks
+    // 1. Structural Identity Guard
     if (!selectedHomeTeam || !selectedAwayTeam) {
         alert("Selection Error: Please pick distinct home and away teams first.");
         return;
@@ -238,106 +224,154 @@ function processAnalysis() {
         return;
     }
 
+    // 2. Strict Floating-Point Extraction
     const hOdds = parseFloat(document.getElementById("home-odds").value);
     const dOdds = parseFloat(document.getElementById("draw-odds").value);
     const aOdds = parseFloat(document.getElementById("away-odds").value);
 
+    // Boundary Check: Prevent division by zero or negative mathematical values
     if (isNaN(hOdds) || isNaN(dOdds) || isNaN(aOdds) || hOdds <= 1.0 || dOdds <= 1.0 || aOdds <= 1.0) {
         alert("Input Value Error: Please set numerical odds values higher than 1.00");
         return;
     }
 
-    // 2. Algorithm Core Processing Mechanics
+    // 3. Raw Implicit Market Probabilities
     const rawHProb = 1 / hOdds;
     const rawDProb = 1 / dOdds;
     const rawAProb = 1 / aOdds;
     const totalMargin = rawHProb + rawDProb + rawAProb;
 
-    const hProbPercent = ((rawHProb / totalMargin) * 100).toFixed(1);
-    const dProbPercent = ((rawDProb / totalMargin) * 100).toFixed(1);
-    const aProbPercent = ((rawAProb / totalMargin) * 100).toFixed(1);
-    const bookieMarginPercent = ((totalMargin - 1) * 100).toFixed(2);
+    // 4. Overround Strip Engine (Keeps values as NUMBERS for safe math operators later)
+    let hProbPercent = (rawHProb / totalMargin) * 100;
+    let dProbPercent = (rawDProb / totalMargin) * 100;
+    let aProbPercent = (rawAProb / totalMargin) * 100;
+    const bookieMarginPercent = (totalMargin - 1) * 100;
 
+    // 5. Baseline Strength Tier Assignment
     const homeTier = TEAM_TIERS[selectedHomeTeam];
     const awayTier = TEAM_TIERS[selectedAwayTeam];
-    const tierDifferential = awayTier - homeTier;
+    
+    // Core Engine Multiplier: Grants a +0.5 Tier boost to balance severe Away-Disadvantage Bias
+    const tierDifferential = awayTier - (homeTier - 0.5);
 
+    // Pull historical relationship data from Segment 2
+    const relationalNetwork = findHistoricalRelationship(selectedHomeTeam, selectedAwayTeam);
+    
     let prediction = "";
     let confidence = "";
     let dangerFlag = "NONE";
     let expectedTemplates = [];
-
-    // --- INTEGRATING LIBRARY LOGIC INTO THE LIVE ODDS CALCULATION ---
+    
+    // 1. Core Network Library Weight Interventions
     if (relationalNetwork.type === "DIRECT_HISTORICAL") {
         let historicalMatch = relationalNetwork.match;
-        dangerFlag = MATCH LIBRARY RECON: These teams met previously. Scoreline was [ ${historicalMatch.hg} - ${historicalMatch.ag} ]. The algorithm          heavily favors mirroring or bouncing score timelines.;
+        dangerFlag = `MATCH LIBRARY RECON: These teams met previously. Scoreline was [ ${historicalMatch.hg} - ${historicalMatch.ag} ]. The algorithm heavily favors mirroring or bouncing score timelines.`;
         
-        // Adjust baseline probability calculation by 10% to weight past results
-        if (historicalMatch.hg > historicalMatch.ag) hProbPercent += 10;
-        else if (historicalMatch.hg < historicalMatch.ag) aProbPercent += 10;
-        else dProbPercent += 10;
+        // Inject 10% mathematical weight bias based on concrete prior results
+        if (historicalMatch.hg > historicalMatch.ag) {
+            hProbPercent += 10;
+        } else if (historicalMatch.hg < historicalMatch.ag) {
+            aProbPercent += 10;
+        } else {
+            dProbPercent += 10;
+        }
+    } 
+    else if (relationalNetwork.type === "REVERSE_HISTORICAL") {
+        let historicalMatch = relationalNetwork.match;
+        dangerFlag = `REVERSE MATRIX MATCH: Met in opposing ground configuration previously where score was [ ${historicalMatch.hg} - ${historicalMatch.ag} ]. Engine usually applies a home-ground inverse multiplier.`;
     }
-        else if (relationalNetwork.type === "REVERSE_HISTORICAL") {
-            let historicalMatch = relationalNetwork.match;
-            dangerFlag = REVERSE MATRIX MATCH: Met in opposing ground configuration previously where score was [ ${historicalMatch.hg} - ${historicalMatch.ag} ]. Engine usually applies a home-ground inverse multiplier.;
+
+    // 2. Algorithmic Prediction Tree
+    // Rule A: Extreme Favorite Trap Zone (Identified in Liverpool/Newcastle cycles)
+    if (hOdds <= 1.45 || aOdds <= 1.45) {
+        const favTeam = hOdds <= 1.45 ? selectedHomeTeam : selectedAwayTeam;
+        prediction = `DRAW (X) or ${favTeam} Narrow Win`;
+        confidence = "MEDIUM-LOW (Favorite Trap Detected)";
+        if (dangerFlag === "NONE") {
+            dangerFlag = "CRITICAL: Engine heavily suppresses heavy favorites back-to-back. High probability of a 0-0/1-1 timeline stall.";
         }
-    // Execute prediction classification using the combined logic matrix
-        if (hOdds <= 1.45 || aOdds <= 1.45) {
-        const favTeam = hOdds <= 1.45 ? 
-            selectedHomeTeam : selectedAwayTeam;
-            prediction = DRAW (X) or ${favTeam} Narrow Win;
-            confidence = "MEDIUM-LOW (Favorite Trap Detected)";
-            expectedTemplates = ["0-0_A (Clean Sheet Anchor)", "1-1_C (Late Equalizer)"];
+        expectedTemplates = ["0-0_A (Clean Sheet Anchor)", "1-1_C (Late Equalizer)", "1-0_B (71st Minute Lock)"];
+    } 
+    // Rule B: Standard Home Favorite Dominance
+    else if (hProbPercent > aProbPercent && tierDifferential >= 0.5) {
+        if (hOdds <= 1.85) {
+            prediction = `HOME WIN (1) - ${selectedHomeTeam}`;
+            confidence = "HIGH";
+            expectedTemplates = ["2-0_A (14', 29')", "3-1_A (39', 55', 85')"];
+            if (tierDifferential >= 2) {
+                expectedTemplates.push("5-0_Blowout (3', 17', 45', 47', 74')");
+            }
+        } else {
+            prediction = `HOME WIN (1) or DRAW (X)`;
+            confidence = "MEDIUM";
+            expectedTemplates = ["1-0_B (68')", "2-1_A (35', 78', 2')"];
         }
-        else if (hProbPercent > aProbPercent && tierDifferential >= 0.5) {
-        if (hOdds <= 1.85) {prediction = HOME WIN (1) - ${selectedHomeTeam};
-                            confidence = "HIGH";
-                            expectedTemplates = ["2-0_A", "2-1_B"];
-        if (tierDifferential >= 2) expectedTemplates.push("4-1_Blowout");
-                           } 
-        else {prediction = HOME WIN (1) or DRAW (X);
-              confidence = "MEDIUM";
-              expectedTemplates = ["1-0_B", "1-1_Static"];
-             }
+    } 
+    // Rule C: Standard Away Favorite Dominance
+    else if (aProbPercent > hProbPercent && tierDifferential <= -0.5) {
+        if (aOdds <= 1.85) {
+            prediction = `AWAY WIN (2) - ${selectedAwayTeam}`;
+            confidence = "HIGH";
+            expectedTemplates = ["1-2_A (12', 48')", "1-3_B (8', 18', 80')"];
+            if (tierDifferential <= -2) {
+                expectedTemplates.push("1-5_Extreme (16' | 13', 41', 52', 69', 76')");
+            }
+        } else {
+            prediction = `AWAY WIN (2) or DRAW (X)`;
+            confidence = "MEDIUM";
+            expectedTemplates = ["0-1_A (13')", "2-2_Template"];
         }
-        else if (aProbPercent > hProbPercent && tierDifferential <= -0.5) {
-            if (aOdds <= 1.85) {prediction = AWAY WIN (2) - ${selectedAwayTeam};
-                                confidence = "HIGH";
-                                expectedTemplates = ["0-2_A", "1-3_Template"];
-                               } 
-            else {prediction = AWAY WIN (2) or DRAW (X);
-                  confidence = "MEDIUM";
-                  expectedTemplates = ["0-1_A", "1-1_Anchor"];
-                 }
+    } 
+    // Rule D: Balanced Mid-Table Clash (The ultimate draw engine pattern)
+    else {
+        prediction = "DRAW (X)";
+        confidence = "MEDIUM";
+        if (dangerFlag === "NONE") {
+            dangerFlag = "HIGH DRAW MATRIX: Highly balanced market profiles trigger the engine's under-2.5 goal defense script.";
         }
-        else {prediction = "DRAW (X)";
-              confidence = "MEDIUM";
-              dangerFlag = "HIGH DRAW MATRIX: Even network history profiles triggered an Under-2.5 systemic correction pattern.";expectedTemplates = ["1-1_A", "0-0_Static"];
-             }
-    // Render calculations back out to UI
-    document.getElementById("res-matchup").textContent = ${selectedHomeTeam} (Tier ${homeTier}) vs ${selectedAwayTeam} (Tier ${awayTier});
-    document.getElementById("res-true-odds").textContent = Home: ${hProbPercent.toFixed(1)}% | Draw: ${dProbPercent.toFixed(1)}% | Away:                     ${aProbPercent.toFixed(1)}%;
-    document.getElementById("res-margin").textContent = ${bookieMarginPercent}% Extra Profit Margin Detected;
+        expectedTemplates = ["1-1_A (69' Anchor)", "0-0_A (Static Clean Sheet)"];
+    }
+    
+    // 1. Text Injections For Core Calculated Metrics
+    document.getElementById("res-matchup").textContent = `${selectedHomeTeam} (Tier ${homeTier}) vs ${selectedAwayTeam} (Tier ${awayTier})`;
+    document.getElementById("res-true-odds").textContent = `Home: ${hProbPercent.toFixed(1)}% | Draw: ${dProbPercent.toFixed(1)}% | Away: ${aProbPercent.toFixed(1)}%`;
+    document.getElementById("res-margin").textContent = `${bookieMarginPercent.toFixed(2)}% Extra Profit Margin Detected`;
+    
+    // 2. Main Prediction Displays
     document.getElementById("res-winner").textContent = prediction;
     document.getElementById("res-confidence").textContent = confidence;
-    const 
-        confEl =  document.getElementById("res-confidence");
-        confEl.className = "value";
-    if (confidence === "HIGH")
+    
+    // 3. Dynamic Confidence Level CSS Toggles
+    const confEl = document.getElementById("res-confidence");
+    confEl.className = "value"; // Reset classes first safely
+    if (confidence.includes("HIGH")) {
         confEl.classList.add("text-green");
-    else if (confidence === "MEDIUM") 
+    } else if (confidence.includes("MEDIUM") && !confidence.includes("LOW")) {
         confEl.classList.add("text-yellow");
-    else
+    } else {
         confEl.classList.add("text-red");
-    const
-        riskEl = document.getElementById("res-risk");
-        riskEl.textContent = dangerFlag;
-        riskEl.className = "value-text " + (dangerFlag === "NONE" ? "text-green" : "text-red");
-    const
-        listEl = document.getElementById("res-templates");
-        listEl.innerHTML = "";expectedTemplates.forEach(tpl => {
-    const item = document.createElement("li");
-        item.textContent = -> Template ${tpl};listEl.appendChild(item);
-        }
-        );
-    document.getElementById("results-panel").classList.remove("hidden");}
+    }
+
+    // 4. Dynamic Risk Assessment & Alarm Text Formatting
+    const riskEl = document.getElementById("res-risk");
+    riskEl.textContent = dangerFlag;
+    riskEl.className = "value-text"; // Reset
+    if (dangerFlag === "NONE") {
+        riskEl.classList.add("text-green");
+    } else {
+        riskEl.classList.add("text-red");
+    }
+
+    // 5. Append Custom Timeline Match Templates Dynamically
+    const listEl = document.getElementById("res-templates");
+    listEl.innerHTML = ""; // Wipe previous outputs cleanly
+    
+    expectedTemplates.forEach(tpl => {
+        const item = document.createElement("li");
+        item.textContent = `-> Template ${tpl}`;
+        listEl.appendChild(item);
+    });
+
+    // 6. Smooth UI Reveal (Unhide the whole summary card panel)
+    document.getElementById("results-panel").classList.remove("hidden");
+}
