@@ -3,125 +3,95 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Algo Cracker Dashboard</title>
+    <title>Virtual Football Algorithm Cracker</title>
+    <!-- Tailwind CSS v4 CDN Framework Engine for Grid layouts -->
     <script src="https://jsdelivr.net"></script>
+    <!-- Link directly to your local isolated CSS design stylesheet sheets -->
+    <link rel="stylesheet" href="style.css">
 </head>
-<body class="bg-slate-950 text-slate-100 p-4 font-sans">
+<body class="p-3 md:p-6 antialiased min-h-screen flex items-center justify-center">
 
-    <div class="max-w-xl mx-auto mt-6 bg-slate-900 border border-slate-800 rounded-2xl shadow-xl p-6">
-        <div class="text-center border-b border-slate-800 pb-4 mb-6">
-            <h1 class="text-xl font-black text-amber-500 tracking-wide uppercase">🐍 Python-Worker Cracker</h1>
-            <p class="text-slate-500 text-xs mt-0.5">Cloudflare Front-End Bridged to Cloudflare Python Workers Environment</p>
+    <div class="w-full max-w-xl bg-slate-900 border border-slate-800 rounded-2xl shadow-2xl p-5 md:p-6">
+        <!-- Dashboard Branding Header Module -->
+        <div class="text-center border-b border-slate-800 pb-4 mb-5">
+            <h1 class="text-xl md:text-2xl font-black text-amber-500 tracking-wider uppercase flex items-center justify-center gap-2">
+                <span>⚡</span> VFL ENGINE CRACKER
+            </h1>
+            <p class="text-slate-400 text-[11px] font-medium tracking-wide mt-1 bg-slate-950/60 py-1 px-3 rounded-full inline-block border border-slate-800/50">
+                Bridged to Cloudflare Python Workers Environment
+            </p>
         </div>
 
+        <!-- Inputs Parameters Matrix Content Form Box -->
         <div class="space-y-4">
+            <!-- Team Drops Selector Rows -->
             <div class="grid grid-cols-2 gap-3">
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Home Team</label>
-                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 outline-none"></select>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 px-0.5">Home Team</label>
+                    <select id="homeTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-semibold outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 cursor-pointer shadow-inner"></select>
                 </div>
                 <div>
-                    <label class="block text-[10px] font-bold uppercase tracking-wider text-slate-400 mb-1">Away Team</label>
-                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-sm text-slate-200 outline-none"></select>
+                    <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-1.5 px-0.5">Away Team</label>
+                    <select id="awayTeam" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-3 text-sm text-slate-100 font-semibold outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500/20 cursor-pointer shadow-inner"></select>
                 </div>
             </div>
 
-            <div class="grid grid-cols-3 gap-2 pt-2">
-                <input type="number" id="hOdds" step="0.01" placeholder="Home Odds (1)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
-                <input type="number" id="dOdds" step="0.01" placeholder="Draw Odds (X)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
-                <input type="number" id="aOdds" step="0.01" placeholder="Away Odds (2)" class="bg-slate-800 border border-slate-700 rounded-lg p-2 text-center text-sm font-mono outline-none text-white">
+            <!-- Live Market Decimal Odds Fields -->
+            <div class="bg-slate-950/40 p-4 rounded-xl border border-slate-800/60">
+                <label class="block text-[10px] font-bold uppercase tracking-widest text-slate-400 text-center mb-2.5">Live Decimal Match Odds</label>
+                <div class="grid grid-cols-3 gap-2.5">
+                    <div>
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Home (1)</span>
+                        <input type="number" id="hOdds" step="0.01" min="1.01" placeholder="2.30" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                    </div>
+                    <div>
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Draw (X)</span>
+                        <input type="number" id="dOdds" step="0.01" min="1.01" placeholder="3.40" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                    </div>
+                    <div>
+                        <span class="block text-center text-[10px] font-bold text-slate-500 uppercase mb-1">Away (2)</span>
+                        <input type="number" id="aOdds" step="0.01" min="1.01" placeholder="2.90" class="w-full bg-slate-800 border border-slate-700 rounded-xl p-2.5 text-center text-sm font-mono font-bold outline-none text-white focus:border-amber-500 focus:bg-slate-800/80 shadow-md">
+                    </div>
+                </div>
             </div>
 
-            <button onclick="sendToPythonWorker()" class="w-full bg-amber-500 hover:bg-amber-600 transition text-slate-950 font-black text-xs uppercase tracking-wider py-3 rounded-lg mt-4 cursor-pointer">
-                Process via Cloudflare Python
+            <!-- Calculation Core Trigger Execution Action Button -->
+            <button onclick="sendToPythonWorker()" class="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-[0.99] transform-all text-slate-950 font-black text-xs uppercase tracking-widest py-3.5 rounded-xl shadow-lg cursor-pointer flex items-center justify-center gap-2">
+                🚀 RUN ALGORITHMIC CRACK ENGINE
             </button>
         </div>
 
-        <!-- Analytical Output Block -->
-        <div id="outputBlock" class="hidden mt-6 border-t border-slate-800 pt-4 space-y-3">
-            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 text-center text-xs">
-                <span id="trueProbabilities" class="font-mono text-slate-300 font-bold"></span>
-                <span id="overround" class="block text-[10px] text-red-400 mt-0.5"></span>
+        <!-- Result Matrix Component Output Cards (Hidden on System Boot) -->
+        <div id="outputBlock" class="hidden mt-6 border-t border-slate-800 pt-5 space-y-4">
+            
+            <!-- Statistical Probability Percentage Data Display Box -->
+            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-center shadow-inner">
+                <span class="block text-[9px] uppercase tracking-widest font-black text-slate-500 mb-1">True Probability Projections</span>
+                <span id="trueProbabilities" class="font-mono text-sm font-black text-slate-200 tracking-wide"></span>
+                <span id="overround" class="block text-[10px] text-rose-400 font-bold mt-1 bg-rose-950/20 py-0.5 rounded-md max-w-max mx-auto px-2"></span>
             </div>
-            <div class="bg-slate-800 p-3 rounded-lg">
-                <span class="block text-[9px] uppercase tracking-wider text-slate-400 font-bold">Calculated Target Outcome</span>
-                <span id="predictionOutput" class="text-sm font-black text-amber-400 block mt-0.5"></span>
+
+            <!-- Target Strategic Selection Value Output Screen Block -->
+            <div class="bg-slate-800/80 border border-slate-700/50 p-4 rounded-xl shadow-md">
+                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold">Calculated Target Selection</span>
+                <span id="predictionOutput" class="text-base md:text-lg font-black text-amber-400 block mt-1 tracking-wide"></span>
             </div>
-            <div id="dangerBlock" class="bg-red-950/20 border border-red-900/50 p-3 rounded-lg hidden">
-                <span class="block text-[9px] uppercase tracking-wider text-red-400 font-bold">Risk Flag</span>
-                <p id="dangerOutput" class="text-xs text-red-300 mt-0.5 leading-relaxed"></p>
+
+            <!-- Dynamic Risk Condition assessment Warning Area -->
+            <div id="dangerBlock" class="bg-rose-950/20 border border-rose-900/50 p-4 rounded-xl hidden">
+                <span class="block text-[9px] uppercase tracking-widest text-rose-400 font-extrabold flex items-center gap-1">⚠️ RISK ASSESSMENT ALERT</span>
+                <p id="dangerOutput" class="text-xs text-rose-300 mt-1.5 font-medium leading-relaxed"></p>
             </div>
-            <div class="bg-slate-950 p-3 rounded-lg border border-slate-800">
-                <span class="block text-[9px] uppercase tracking-wider text-slate-400 font-bold mb-1">Expected Timeline Scripts</span>
-                <ul id="templatesList" class="text-xs font-mono text-slate-400 space-y-0.5 list-disc list-inside"></ul>
+
+            <!-- Model Match Timeline Sub Array Template outputs lists -->
+            <div class="bg-slate-950/80 p-4 rounded-xl border border-slate-800 shadow-md">
+                <span class="block text-[9px] uppercase tracking-widest text-slate-400 font-extrabold mb-2 px-0.5">Matching Timeline Scripts Stored In Model</span>
+                <ul id="templatesList" class="text-xs font-mono font-medium text-slate-400 space-y-1.5 list-none pl-1"></ul>
             </div>
         </div>
     </div>
 
-    <script>
-        // PASTE YOUR LIVE CLOUDFLARE WORKER ROUTE URL HERE WHEN DEPLOYED
-        const PYTHON_WORKER_URL = "https://vfl.gikunju.workers.dev";
-
-        window.addEventListener('DOMContentLoaded', async () => {
-            try {
-                const res = await fetch(`${PYTHON_WORKER_URL}`);
-                const teams = await res.json();
-                const hSelect = document.getElementById('homeTeam');
-                const aSelect = document.getElementById('awayTeam');
-                
-                teams.forEach(t => {
-                    hSelect.options.add(new Option(t, t));
-                    aSelect.options.add(new Option(t, t));
-                });
-                aSelect.selectedIndex = 1;
-            } catch(e) { console.error("Synchronizing with Cloudflare Python Worker deployment setup..."); }
-        });
-
-        async function sendToPythonWorker() {
-            const payload = {
-                home: document.getElementById('homeTeam').value,
-                away: document.getElementById('awayTeam').value,
-                h_odds: document.getElementById('hOdds').value,
-                d_odds: document.getElementById('dOdds').value,
-                a_odds: document.getElementById('aOdds').value
-            };
-
-            if(!payload.h_odds || !payload.d_odds || !payload.a_odds) {
-                alert("Please fill out all match decimal odds boxes.");
-                return;
-            }
-
-            try {
-                const response = await fetch(`${PYTHON_WORKER_URL}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
-                });
-                const result = await response.json();
-
-                document.getElementById('trueProbabilities').innerText = `H: ${result.probabilities.home} | X: ${result.probabilities.draw} | A: ${result.probabilities.away}`;
-                document.getElementById('overround').innerText = `Bookie Margin: +${result.overround}`;
-                document.getElementById('predictionOutput').innerText = result.prediction;
-                
-                const dangerBox = document.getElementById('dangerBlock');
-                if(result.danger_flag !== "NONE") {
-                    document.getElementById('dangerOutput').innerText = result.danger_flag;
-                    dangerBox.classList.remove('hidden');
-                } else { dangerBox.classList.add('hidden'); }
-
-                const tList = document.getElementById('templatesList');
-                tList.innerHTML = "";
-                result.templates.forEach(t => {
-                    let li = document.createElement('li');
-                    li.innerText = t;
-                    tList.appendChild(li);
-                });
-
-                document.getElementById('outputBlock').classList.remove('hidden');
-            } catch (err) {
-                alert("Worker Error: Check that your Cloudflare Worker URL is correct and active.");
-            }
-        }
-    </script>
+    <!-- Embed logic sheets connection pointers parameters cleanly at page layout floor base -->
+    <script src="script.js"></script>
 </body>
 </html>
