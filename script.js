@@ -1,7 +1,7 @@
 // script.js - Core Logic Engine for Virtual Football Algorithm Cracker
 
 // 1. Core Endpoints Configuration
-const PYTHON_WORKER_URL = "https://workers.dev";
+const PYTHON_WORKER_URL = "https://vfl.gikunju.workers.dev";
 
 // 2. Fetch Teams Array from Cloudflare Python Worker during System Handshake
 window.addEventListener('DOMContentLoaded', async () => {
@@ -64,7 +64,7 @@ async def sendToPythonWorker() {
 
     try {
         // Send JSON data stream directly to Cloudflare Python Worker environment
-        const response = await fetch(`${https://vfl.gikunju.workers.dev}`, {
+        const response = await fetch(`${PYTHON_WORKER_URL}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(payload)
