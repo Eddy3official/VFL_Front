@@ -12,73 +12,28 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="ambient ambient-one"></div>
-    <div class="ambient ambient-two"></div>
+    <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
     <div class="container">
-        <header class="app-header">
-            <div class="brand-mark" aria-hidden="true">⚽</div>
-            <div>
-                <p class="eyebrow">VIRTUAL FOOTBALL LAB</p>
-                <h1>OdiLeague <span>Analyzer</span></h1>
-                <p class="subtitle">A clearer probability model for every fixture.</p>
-            </div>
-            <div class="live-pill"><span></span> MODEL ONLINE</div>
-        </header>
-
+        <header class="app-header"><div class="brand-mark" aria-hidden="true">⚽</div><div><p class="eyebrow">VIRTUAL FOOTBALL LAB</p><h1>OdiLeague <span>Analyzer</span></h1><p class="subtitle">A clearer probability model for every fixture.</p></div><div class="live-pill"><span>●</span> MODEL ONLINE</div></header>
         <main>
             <section class="panel control-panel">
-                <div class="section-heading">
-                    <div><p class="eyebrow">01 / FIXTURE</p><h2>Set the matchup</h2></div>
-                    <span class="step-icon">✦</span>
-                </div>
+                <div class="section-heading"><div><p class="eyebrow">01 / FIXTURE</p><h2>Set the matchup</h2></div><span class="step-icon">✦</span></div>
                 <div class="form-row teams-row">
-                    <div class="form-group">
-                        <label for="home-trigger">Home team</label>
-                        <div class="custom-select-container" id="home-select-container">
-                            <button type="button" class="custom-select-trigger" id="home-trigger">Select home team</button>
-                            <div class="custom-options" id="home-options">
-                                <input type="search" class="search-input" id="home-search" placeholder="Search team..." autocomplete="off">
-                                <div class="options-list" id="home-list"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="form-group"><label for="home-trigger">Home team</label><div class="custom-select-container"><button type="button" class="custom-select-trigger" id="home-trigger">Select home team</button><div class="custom-options" id="home-options"><input type="search" class="search-input" id="home-search" placeholder="Search team..." autocomplete="off"><div class="options-list" id="home-list"></div></div></div></div>
                     <div class="versus" aria-hidden="true">VS</div>
-                    <div class="form-group">
-                        <label for="away-trigger">Away team</label>
-                        <div class="custom-select-container" id="away-select-container">
-                            <button type="button" class="custom-select-trigger" id="away-trigger">Select away team</button>
-                            <div class="custom-options" id="away-options">
-                                <input type="search" class="search-input" id="away-search" placeholder="Search team..." autocomplete="off">
-                                <div class="options-list" id="away-list"></div>
-                            </div>
-                        </div>
-                    </div>
+                    <div class="form-group"><label for="away-trigger">Away team</label><div class="custom-select-container"><button type="button" class="custom-select-trigger" id="away-trigger">Select away team</button><div class="custom-options" id="away-options"><input type="search" class="search-input" id="away-search" placeholder="Search team..." autocomplete="off"><div class="options-list" id="away-list"></div></div></div></div>
                 </div>
-
                 <div class="subheading"><span>Market odds</span><small>Decimal format · greater than 1.00</small></div>
-                <div class="form-row odds-row">
-                    <div class="form-group"><label for="home-odds">Home <b>1</b></label><input type="number" id="home-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="1.85"></div>
-                    <div class="form-group"><label for="draw-odds">Draw <b>X</b></label><input type="number" id="draw-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="3.40"></div>
-                    <div class="form-group"><label for="away-odds">Away <b>2</b></label><input type="number" id="away-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="4.20"></div>
-                </div>
-
-                <div class="subheading"><span>Context signals</span><small>Select the current league context</small></div>
-                <div class="form-row context-row">
-                    <div class="form-group"><label for="input-matchday">Matchday <b>1–38</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="input-matchday" data-value="20" aria-label="Select matchday">20</button><div class="custom-options numeric-options" id="input-matchday-options"><div class="options-list" id="input-matchday-list"></div></div></div></div>
-                    <div class="form-group"><label for="home-table-rank">Home rank <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="home-table-rank" data-value="10" aria-label="Select home league rank">10</button><div class="custom-options numeric-options" id="home-table-rank-options"><div class="options-list" id="home-table-rank-list"></div></div></div></div>
-                    <div class="form-group"><label for="away-table-rank">Away rank <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="away-table-rank" data-value="10" aria-label="Select away league rank">10</button><div class="custom-options numeric-options" id="away-table-rank-options"><div class="options-list" id="away-table-rank-list"></div></div></div></div>
-                </div>
-                <button id="crack-btn" class="primary-btn" type="button"><span>Run analysis</span><span class="button-arrow">→</span></button>
-                <p class="form-note">Estimates are model outputs, not guarantees. Always assess risk responsibly.</p>
+                <div class="form-row odds-row"><div class="form-group"><label for="home-odds">Home <b>1</b></label><input type="number" id="home-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="1.85"></div><div class="form-group"><label for="draw-odds">Draw <b>X</b></label><input type="number" id="draw-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="3.40"></div><div class="form-group"><label for="away-odds">Away <b>2</b></label><input type="number" id="away-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="4.20"></div></div>
+                <div class="subheading"><span>Context signals</span><small>Matchday is saved with each analysis</small></div>
+                <div class="form-row"><div class="form-group"><label for="input-matchday">Matchday <b>1–38</b></label><input type="number" id="input-matchday" min="1" max="38" step="1" placeholder="20"></div></div>
+                <button id="crack-btn" class="primary-btn" type="button"><span>Run analysis</span><span class="button-arrow">→</span></button><p class="form-note">Estimates are model outputs, not guarantees. Always assess risk responsibly.</p>
             </section>
-
             <section class="panel results-panel hidden" id="results-panel" aria-live="polite">
                 <div class="section-heading"><div><p class="eyebrow">02 / OUTPUT</p><h2>Analysis report</h2></div><span class="status-dot">●</span></div>
                 <div class="match-banner"><span class="match-ball">⚽</span><span id="res-matchup"></span></div>
-                <div class="probability-grid" id="probability-grid"><div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong><i></i></div><div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong><i></i></div><div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong><i></i></div></div>
-                <div class="report-grid"><div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span></div><div class="metric"><span class="label">BOOKMAKER MARGIN</span><strong id="res-margin" class="highlight-yellow"></strong></div></div>
-                <div class="risk-box"><span class="risk-icon">!</span><div><span class="label">RISK ASSESSMENT</span><p id="res-risk"></p></div></div>
-                <div class="templates-box"><div class="label">MODEL SIGNALS</div><ul id="res-templates" class="template-list"></ul></div>
+                <div class="probability-grid"><div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong></div><div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong></div><div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong></div></div>
+                <div class="report-grid"><div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span><p class="value-text" id="res-margin"></p></div><div class="risk-box"><span class="risk-icon">!</span><div><span class="label">RISK ASSESSMENT</span><p id="res-risk"></p></div></div><div class="templates-box"><div class="label">MODEL SIGNALS</div><ul id="res-templates" class="template-list"></ul></div></div>
             </section>
         </main>
         <footer>Built for analysis · Powered by transparent probability signals</footer>
