@@ -62,11 +62,11 @@
                     <div class="form-group"><label for="away-odds">Away <b>2</b></label><input type="number" id="away-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="4.20"></div>
                 </div>
 
-                <div class="subheading"><span>Context signals</span><small>Optional, but improves calibration</small></div>
+                <div class="subheading"><span>Context signals</span><small>Select the current league context</small></div>
                 <div class="form-row context-row">
-                    <div class="form-group"><label for="input-matchday">Matchday <b>1–38</b></label><input type="number" id="input-matchday" min="1" max="38" step="1" value="20" placeholder="20" inputmode="numeric"></div>
-                    <div class="form-group"><label for="home-table-rank">Home rank <b>1–20</b></label><input type="number" id="home-table-rank" min="1" max="20" step="1" value="10" placeholder="10" inputmode="numeric"></div>
-                    <div class="form-group"><label for="away-table-rank">Away rank <b>1–20</b></label><input type="number" id="away-table-rank" min="1" max="20" step="1" value="10" placeholder="10" inputmode="numeric"></div>
+                    <div class="form-group"><label for="input-matchday">Matchday <b>1–38</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="input-matchday" data-value="20" aria-label="Select matchday">20</button><div class="custom-options numeric-options" id="input-matchday-options"><div class="options-list" id="input-matchday-list"></div></div></div></div>
+                    <div class="form-group"><label for="home-table-rank">Home rank <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="home-table-rank" data-value="10" aria-label="Select home league rank">10</button><div class="custom-options numeric-options" id="home-table-rank-options"><div class="options-list" id="home-table-rank-list"></div></div></div></div>
+                    <div class="form-group"><label for="away-table-rank">Away rank <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger numeric-select-trigger" id="away-table-rank" data-value="10" aria-label="Select away league rank">10</button><div class="custom-options numeric-options" id="away-table-rank-options"><div class="options-list" id="away-table-rank-list"></div></div></div></div>
                 </div>
                 <button id="crack-btn" class="primary-btn" type="button"><span>Run analysis</span><span class="button-arrow">→</span></button>
                 <p class="form-note">Estimates are model outputs, not guarantees. Always assess risk responsibly.</p>
@@ -75,15 +75,8 @@
             <section class="panel results-panel hidden" id="results-panel" aria-live="polite">
                 <div class="section-heading"><div><p class="eyebrow">02 / OUTPUT</p><h2>Analysis report</h2></div><span class="status-dot">●</span></div>
                 <div class="match-banner"><span class="match-ball">⚽</span><span id="res-matchup"></span></div>
-                <div class="probability-grid" id="probability-grid">
-                    <div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong><i></i></div>
-                    <div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong><i></i></div>
-                    <div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong><i></i></div>
-                </div>
-                <div class="report-grid">
-                    <div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span></div>
-                    <div class="metric"><span class="label">BOOKMAKER MARGIN</span><strong id="res-margin" class="highlight-yellow"></strong></div>
-                </div>
+                <div class="probability-grid" id="probability-grid"><div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong><i></i></div><div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong><i></i></div><div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong><i></i></div></div>
+                <div class="report-grid"><div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span></div><div class="metric"><span class="label">BOOKMAKER MARGIN</span><strong id="res-margin" class="highlight-yellow"></strong></div></div>
                 <div class="risk-box"><span class="risk-icon">!</span><div><span class="label">RISK ASSESSMENT</span><p id="res-risk"></p></div></div>
                 <div class="templates-box"><div class="label">MODEL SIGNALS</div><ul id="res-templates" class="template-list"></ul></div>
             </section>
