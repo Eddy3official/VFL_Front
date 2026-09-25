@@ -1,31 +1,451 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#07111f"><meta name="description" content="OdiLeague match probability analysis dashboard"><title>OdiLeague Match Analyzer</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#07111f">
+  <meta name="description" content="OdiLeague Gameweek Analyzer - Smart Data Input">
+  <title>OdiLeague Gameweek Analyzer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #07111f 0%, #0d1e2f 100%);
+      color: #e0e7ff;
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 40px;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(224, 231, 255, 0.1);
+    }
+
+    .brand-mark {
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .subtitle {
+      color: #94a3b8;
+      font-size: 0.95rem;
+    }
+
+    .panel {
+      background: rgba(30, 41, 59, 0.6);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 12px;
+      padding: 30px;
+      margin-bottom: 30px;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+    }
+
+    .section-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(224, 231, 255, 0.1);
+    }
+
+    .eyebrow {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #a78bfa;
+      font-weight: 600;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin-top: 5px;
+    }
+
+    .status-pill {
+      background: rgba(34, 197, 94, 0.2);
+      color: #86efac;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 15px;
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      border-radius: 8px;
+      color: #e0e7ff;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+
+    textarea::placeholder {
+      color: rgba(148, 163, 184, 0.5);
+    }
+
+    button {
+      background: linear-gradient(135deg, #a78bfa 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(167, 139, 250, 0.3);
+    }
+
+    button:active {
+      transform: translateY(0);
+    }
+
+    .secondary-btn {
+      background: rgba(148, 163, 184, 0.2);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #cbd5e1;
+    }
+
+    .secondary-btn:hover {
+      background: rgba(148, 163, 184, 0.3);
+      box-shadow: none;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .results-panel {
+      transition: opacity 0.3s ease;
+    }
+
+    .results-panel.hidden {
+      display: none;
+    }
+
+    .match-banner {
+      background: linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(167, 139, 250, 0.1));
+      border-left: 4px solid #60a5fa;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    .match-banner span:first-child {
+      font-size: 1.2rem;
+    }
+
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .match-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+
+    .match-card:hover {
+      border-color: rgba(96, 165, 250, 0.6);
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    .match-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(224, 231, 255, 0.1);
+    }
+
+    .match-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: #e0e7ff;
+    }
+
+    .prediction-badge {
+      background: linear-gradient(135deg, #34d399 0%, #10b981 100%);
+      color: #1f3a3a;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .prediction-badge.draw {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: #3f2206;
+    }
+
+    .prediction-badge.away {
+      background: linear-gradient(135deg, #f87171 0%, #ef4444 100%);
+      color: #3f1015;
+    }
+
+    .odds-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .odds-cell {
+      text-align: center;
+    }
+
+    .odds-label {
+      display: block;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-bottom: 4px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .odds-value {
+      display: block;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #60a5fa;
+    }
+
+    .confidence-text {
+      font-size: 0.85rem;
+      color: #cbd5e1;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(224, 231, 255, 0.1);
+    }
+
+    .probability-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .probability-card {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(96, 165, 250, 0.3);
+      padding: 15px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .probability-card label {
+      display: block;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .probability-card strong {
+      font-size: 1.8rem;
+      color: #60a5fa;
+      display: block;
+    }
+
+    .summary-stats {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid rgba(148, 163, 184, 0.2);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(224, 231, 255, 0.05);
+    }
+
+    .stat-row:last-child {
+      border-bottom: none;
+    }
+
+    .stat-label {
+      color: #94a3b8;
+      font-size: 0.9rem;
+    }
+
+    .stat-value {
+      color: #e0e7ff;
+      font-weight: 600;
+    }
+
+    .error-banner {
+      border-color: rgba(239, 68, 68, 0.4) !important;
+      color: #fca5a5 !important;
+    }
+
+    .error-banner span:first-child {
+      color: #fca5a5;
+    }
+
+    .success-banner {
+      border-color: rgba(34, 197, 94, 0.4) !important;
+      color: #bbf7d0 !important;
+    }
+
+    .success-banner span:first-child {
+      color: #bbf7d0;
+    }
+
+    footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.85rem;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(224, 231, 255, 0.1);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      .panel {
+        padding: 20px;
+      }
+
+      .match-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .odds-row {
+        grid-template-columns: 1fr;
+      }
+
+      .probability-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-<div class="container">
-<header class="app-header"><div class="brand-mark" aria-hidden="true">⚽</div><div><p class="eyebrow">VIRTUAL FOOTBALL LAB</p><h1>OdiLeague <span>Analyzer</span></h1><p class="subtitle">A clearer probability model for every fixture.</p></div><div class="live-pill"><span>●</span> MODEL ONLINE</div></header>
-<main>
-<section class="panel control-panel">
-<div class="section-heading"><div><p class="eyebrow">01 / FIXTURE</p><h2>Set the matchup</h2></div><span class="step-icon">✦</span></div>
-<div class="form-row teams-row">
-<div class="form-group"><label for="home-trigger">Home team</label><div class="custom-select-container"><button type="button" class="custom-select-trigger" id="home-trigger">Select home team</button><div class="custom-options" id="home-options"><input type="search" class="search-input" id="home-search" placeholder="Search team..." autocomplete="off"><div class="options-list" id="home-list"></div></div></div></div>
-<div class="versus" aria-hidden="true">VS</div>
-<div class="form-group"><label for="away-trigger">Away team</label><div class="custom-select-container"><button type="button" class="custom-select-trigger" id="away-trigger">Select away team</button><div class="custom-options" id="away-options"><input type="search" class="search-input" id="away-search" placeholder="Search team..." autocomplete="off"><div class="options-list" id="away-list"></div></div></div></div>
-</div>
-<div class="subheading"><span>Market odds</span><small>Decimal format · greater than 1.00</small></div>
-<div class="form-row odds-row"><div class="form-group"><label for="home-odds">Home <b>1</b></label><input type="number" id="home-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="1.85"></div><div class="form-group"><label for="draw-odds">Draw <b>X</b></label><input type="number" id="draw-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="3.40"></div><div class="form-group"><label for="away-odds">Away <b>2</b></label><input type="number" id="away-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="4.20"></div></div>
-<div class="subheading"><span>Context signals</span><small>Choose the current league positions</small></div>
-<div class="form-row context-row">
-<div class="form-group"><label for="matchday-trigger">Matchday <b>1–38</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger" id="matchday-trigger">Select matchday</button><div class="custom-options numeric-options" id="matchday-options"><div class="options-list" id="matchday-list"></div></div><input type="hidden" id="input-matchday"></div></div>
-<div class="form-group"><label for="home-rank-trigger">Home position <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger" id="home-rank-trigger">Select position</button><div class="custom-options numeric-options" id="home-rank-options"><div class="options-list" id="home-rank-list"></div></div><input type="hidden" id="home-table-rank"></div></div>
-<div class="form-group"><label for="away-rank-trigger">Away position <b>1–20</b></label><div class="custom-select-container numeric-select-container"><button type="button" class="custom-select-trigger" id="away-rank-trigger">Select position</button><div class="custom-options numeric-options" id="away-rank-options"><div class="options-list" id="away-rank-list"></div></div><input type="hidden" id="away-table-rank"></div></div>
-</div>
-<button id="crack-btn" class="primary-btn" type="button"><span>Run analysis</span><span class="button-arrow">→</span></button><p class="form-note">Estimates are model outputs, not guarantees. Always assess risk responsibly.</p>
-</section>
-<section class="panel results-panel hidden" id="results-panel" aria-live="polite"><div class="section-heading"><div><p class="eyebrow">02 / OUTPUT</p><h2>Analysis report</h2></div><span class="status-dot">●</span></div><div class="match-banner"><span class="match-ball">⚽</span><span id="res-matchup"></span></div><div class="probability-grid"><div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong></div><div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong></div><div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong></div></div><div class="report-grid"><div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span><p class="value-text" id="res-margin"></p></div><div class="risk-box"><span class="risk-icon">!</span><div><span class="label">RISK ASSESSMENT</span><p id="res-risk"></p></div></div><div class="templates-box"><div class="label">MODEL SIGNALS</div><ul id="res-templates" class="template-list"></ul></div></div></section>
-</main><footer>Built for analysis · Powered by transparent probability signals</footer></div><script src="script.js"></script>
-</body></html>
+  <div class="container">
+    <header>
+      <div class="brand-mark">⚽</div>
+      <h1>OdiLeague Gameweek Analyzer</h1>
+      <p class="subtitle">Smart betting data parser – Paste raw odds, get instant predictions</p>
+    </header>
+
+    <main>
+      <section class="panel control-panel">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">01 / INPUT</p>
+            <h2>Paste gameweek data</h2>
+          </div>
+          <span class="status-pill">SMART PARSE</span>
+        </div>
+
+        <p style="color: #94a3b8; margin-bottom: 15px; font-size: 0.9rem;">
+          Paste your betting data directly from the betting website. Format doesn't matter – extra spaces, line breaks, or order variations are automatically handled.
+        </p>
+
+        <textarea id="data-input" placeholder="Paste your betting data here. Example:
+
+London Blues
+Manchester Reds
+
+1
+1.80
+X
+3.55
+2
+4.42
+
+Tottenham
+Wolves
+..."></textarea>
+
+        <div class="button-group">
+          <button id="parse-btn" type="button">
+            <span>Parse & Analyze</span>
+            <span>→</span>
+          </button>
+          <button class="secondary-btn" id="clear-btn" type="button">Clear</button>
+        </div>
+      </section>
+
+      <section class="panel results-panel hidden" id="results-panel" aria-live="polite">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">02 / OUTPUT</p>
+            <h2>Gameweek predictions</h2>
+          </div>
+          <span class="status-pill">LIVE</span>
+        </div>
+        
+        <div id="results-content"></div>
+      </section>
+    </main>
+
+    <footer>Built for precision · Powered by intelligent parsing and transparent probability signals</footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
