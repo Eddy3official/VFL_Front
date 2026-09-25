@@ -2,116 +2,94 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Virtual Football Engine Cracker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#07111f">
+    <meta name="description" content="OdiLeague match probability analysis dashboard">
+    <title>OdiLeague Match Analyzer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
     <div class="container">
-        <header>
-            <h1>🐍OdiLeague Killer</h1>
-            <p>This algorithm is Programmed to predict any match in the OdiLeague, it achieved a 95% win rate during test.</p>
-            <p><strong>CREATED BY EDWARD MURIUKI</strong></p>
+        <header class="app-header">
+            <div class="brand-mark" aria-hidden="true">⚽</div>
+            <div>
+                <p class="eyebrow">VIRTUAL FOOTBALL LAB</p>
+                <h1>OdiLeague <span>Analyzer</span></h1>
+                <p class="subtitle">A clearer probability model for every fixture.</p>
+            </div>
+            <div class="live-pill"><span></span> MODEL ONLINE</div>
         </header>
 
         <main>
-            <!-- Input Control Panel -->
-            <section class="control-panel">
-                <div class="form-row">
-                    <!-- Home Team Custom Dropdown -->
+            <section class="panel control-panel">
+                <div class="section-heading">
+                    <div><p class="eyebrow">01 / FIXTURE</p><h2>Set the matchup</h2></div>
+                    <span class="step-icon">✦</span>
+                </div>
+                <div class="form-row teams-row">
                     <div class="form-group">
-                        <label>Home Team</label>
+                        <label for="home-trigger">Home team</label>
                         <div class="custom-select-container" id="home-select-container">
-                            <div class="custom-select-trigger" id="home-trigger">Select Home Team</div>
+                            <button type="button" class="custom-select-trigger" id="home-trigger">Select home team</button>
                             <div class="custom-options" id="home-options">
-                                <input type="text" class="search-input" id="home-search" placeholder="Search team...">
+                                <input type="search" class="search-input" id="home-search" placeholder="Search team..." autocomplete="off">
                                 <div class="options-list" id="home-list"></div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Away Team Custom Dropdown -->
+                    <div class="versus" aria-hidden="true">VS</div>
                     <div class="form-group">
-                        <label>Away Team</label>
+                        <label for="away-trigger">Away team</label>
                         <div class="custom-select-container" id="away-select-container">
-                            <div class="custom-select-trigger" id="away-trigger">Select Away Team</div>
+                            <button type="button" class="custom-select-trigger" id="away-trigger">Select away team</button>
                             <div class="custom-options" id="away-options">
-                                <input type="text" class="search-input" id="away-search" placeholder="Search team...">
+                                <input type="search" class="search-input" id="away-search" placeholder="Search team..." autocomplete="off">
                                 <div class="options-list" id="away-list"></div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div class="subheading"><span>Market odds</span><small>Decimal format · greater than 1.00</small></div>
                 <div class="form-row odds-row">
-                    <!-- Odds: Home -->
-                    <div class="form-group size-small">
-                        <label>Home Odds (1)</label>
-                        <input type="number" id="home-odds" step="0.01" min="1.01" placeholder="1.85">
-                    </div>
-                    <!-- Odds: Draw -->
-                    <div class="form-group size-small">
-                        <label>Draw Odds (X)</label>
-                        <input type="number" id="draw-odds" step="0.01" min="1.01" placeholder="3.40">
-                    </div>
-                    <!-- Odds: Away -->
-                    <div class="form-group size-small">
-                        <label>Away Odds (2)</label>
-                        <input type="number" id="away-odds" step="0.01" min="1.01" placeholder="4.20">
-                    </div>
-                </div>
-                <div class="footprint-row" style="display: flex; gap: 15px; margin-top: 10px;">
-    <div class="input-group" style="flex: 1;">
-        <label style="font-size: 0.85em; opacity: 0.8;">Matchday (1-38)</label>
-        <input type="number" id="input-matchday" placeholder="Optional (e.g. 8)" value="20" style="padding: 6px;">
-    </div>
-    <div class="input-group" style="flex: 1;">
-        <label style="font-size: 0.85em; opacity: 0.8;">Home League Rank</label>
-        <input type="number" id="home-table-rank" placeholder="Optional (1-20)" value="10" style="padding: 6px;">
-    </div>
+                    <div class="form-group"><label for="home-odds">Home <b>1</b></label><input type="number" id="home-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="1.85"></div>
+                    <div class="form-group"><label for="draw-odds">Draw <b>X</b></label><input type="number" id="draw-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="3.40"></div>
+                    <div class="form-group"><label for="away-odds">Away <b>2</b></label><input type="number" id="away-odds" step="0.01" min="1.01" inputmode="decimal" placeholder="4.20"></div>
                 </div>
 
-                <button id="crack-btn" class="primary-btn">CRACK FIXTURE</button>
+                <div class="subheading"><span>Context signals</span><small>Optional, but improves calibration</small></div>
+                <div class="form-row context-row">
+                    <div class="form-group"><label for="input-matchday">Matchday <b>1–38</b></label><input type="number" id="input-matchday" min="1" max="38" step="1" value="20" placeholder="20" inputmode="numeric"></div>
+                    <div class="form-group"><label for="home-table-rank">Home rank <b>1–20</b></label><input type="number" id="home-table-rank" min="1" max="20" step="1" value="10" placeholder="10" inputmode="numeric"></div>
+                    <div class="form-group"><label for="away-table-rank">Away rank <b>1–20</b></label><input type="number" id="away-table-rank" min="1" max="20" step="1" value="10" placeholder="10" inputmode="numeric"></div>
+                </div>
+                <button id="crack-btn" class="primary-btn" type="button"><span>Run analysis</span><span class="button-arrow">→</span></button>
+                <p class="form-note">Estimates are model outputs, not guarantees. Always assess risk responsibly.</p>
             </section>
 
-            <!-- Results Output Panel -->
-            <section class="results-panel hidden" id="results-panel">
-                <h2>CRACKER DATA OUTPUT</h2>
-                <hr class="divider">
-                
-                <div class="meta-info">
-                    <p><strong>Matchup:</strong> <span id="res-matchup"></span></p>
-                    <p><strong>True Math Odds:</strong> <span id="res-true-odds"></span></p>
-                    <p><strong>Bookie Margin:</strong> <span id="res-margin" class="highlight-yellow"></span></p>
+            <section class="panel results-panel hidden" id="results-panel" aria-live="polite">
+                <div class="section-heading"><div><p class="eyebrow">02 / OUTPUT</p><h2>Analysis report</h2></div><span class="status-dot">●</span></div>
+                <div class="match-banner"><span class="match-ball">⚽</span><span id="res-matchup"></span></div>
+                <div class="probability-grid" id="probability-grid">
+                    <div class="probability-card"><span>HOME</span><strong id="res-home-prob">—</strong><i></i></div>
+                    <div class="probability-card"><span>DRAW</span><strong id="res-draw-prob">—</strong><i></i></div>
+                    <div class="probability-card"><span>AWAY</span><strong id="res-away-prob">—</strong><i></i></div>
                 </div>
-                
-                <hr class="divider">
-
-                <div class="prediction-box">
-                    <div class="output-item">
-                        <span class="label">PROBABLE WINNER:</span>
-                        <span id="res-winner" class="value text-green"></span>
-                    </div>
-                    <div class="output-item">
-                        <span class="label">ALGO CONFIDENCE:</span>
-                        <span id="res-confidence" class="value"></span>
-                    </div>
-                    <div class="output-item danger-container">
-                        <span class="label">RISK ASSESSMENT:</span>
-                        <p id="res-risk" class="value-text"></p>
-                    </div>
+                <div class="report-grid">
+                    <div class="result-highlight"><span class="label">PROBABLE OUTCOME</span><strong id="res-winner"></strong><span class="confidence" id="res-confidence"></span></div>
+                    <div class="metric"><span class="label">BOOKMAKER MARGIN</span><strong id="res-margin" class="highlight-yellow"></strong></div>
                 </div>
-
-                <hr class="divider">
-                
-                <div class="templates-box">
-                    <h3>MATCHTIMELINE TEMPLATES SPOTTED:</h3>
-                    <ul id="res-templates" class="template-list"></ul>
-                </div>
+                <div class="risk-box"><span class="risk-icon">!</span><div><span class="label">RISK ASSESSMENT</span><p id="res-risk"></p></div></div>
+                <div class="templates-box"><div class="label">MODEL SIGNALS</div><ul id="res-templates" class="template-list"></ul></div>
             </section>
         </main>
+        <footer>Built for analysis · Powered by transparent probability signals</footer>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
