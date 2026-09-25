@@ -1,4 +1,4 @@
-const CACHE_NAME = "odileague-shell-v2";
+const CACHE_NAME = "odileague-shell-v3";
 const APP_SHELL = ["./", "./index.html", "./style.css", "./script.js", "./sw.js"];
 
 self.addEventListener("install", event => {
